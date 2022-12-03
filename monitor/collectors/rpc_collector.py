@@ -103,8 +103,9 @@ class RpcCollector(Collector):
             farmed_amount = await self.wallet_client.get_farmed_amount()
             confirmed_balances = []
             for wallet in wallets:
-                balance = await self.wallet_client.get_wallet_balance(wallet["id"])
-                confirmed_balances.append(balance["confirmed_wallet_balance"])
+                if (wallet["type"] == 0 or wallet["type"] == 9):
+                    balance = await self.wallet_client.get_wallet_balance(wallet["id"])
+                    confirmed_balances.append(balance["confirmed_wallet_balance"])
         except Exception as e:
             raise ConnectionError(
                 f"Failed to get wallet balance via RPC. Is your wallet running? {type(e).__name__}: {e}")
